@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Username: {{ person.username }}
+  </h1>
+
+  <p><strong>First name:</strong> {{ person.first_name }}</p>
+  <p><strong>Last name:</strong> {{ person.last_name }}</p>
+  <p><strong>About me:</strong> {{ person.description }}</p>
+
+  <div class="mb-3">
+    <a href="{% url 'catalog:person-update' pk=person.id %}" class="btn btn-secondary link-to-page">
+  Update About me
+    </a>
+    <a href="{% url 'catalog:person-delete' pk=person.id %}" class="btn btn-danger link-to-page">
+      Delete Person
+    </a>
+  </div>
+
+  <h2>Pets</h2>
+  {% for pet in person.pets.all %}
+    <hr>
+    <p><strong>Type:</strong> {{ pet.type }}</p>
+    <p><strong>Breed:</strong> {{ pet.breed.name }}</p>
+  {% empty %}
+    <p>No pets assigned to this pers.</p>
+  {% endfor %}
+{% endblock %}

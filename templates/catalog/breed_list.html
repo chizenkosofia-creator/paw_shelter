@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Breeds List
+    <a href="{% url 'catalog:breed-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+
+  {% if breed_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Active need</th>
+        <th>Description</th>
+      </tr>
+
+      {% for breed in breed_list %}
+        <tr>
+          <td>
+              {{ breed.id }}
+          </td>
+          <td>
+              {{ breed.name }}
+          </td>
+          <td>
+              {{ breed.type }}
+          </td>
+          <td>
+              <a href="{% url 'catalog:breed-update' pk=breed.id %}">
+                Update
+              </a>
+            </td>
+            <td>
+              <a style="color: red"
+                href="{% url 'catalog:breed-delete' pk=breed.id %}">
+                Delete
+              </a>
+            </td>
+        </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+      <p>There are no breeds in the service.</p>
+  {% endif %}
+{% endblock %}
+/
