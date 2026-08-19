@@ -54,6 +54,7 @@ class PersonDetailView(LoginRequiredMixin, generic.DetailView):
 
 class PersonDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = User
+    template_name = "catalog/person_confirm_delete.html"
     success_url = reverse_lazy("catalog:person-list")
 
 

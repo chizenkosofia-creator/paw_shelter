@@ -43,7 +43,11 @@
 
   <div class="row g-4">
     <div class="col-lg-5">
-
+       {% if pet.image %}
+            <img src="{{ pet.image.url }}" class="card-img-top" alt="{{ pet.name }}" style="height: 220px; object-fit: cover;">
+          {% else %}
+            <img src="{% static 'paw_shelter\media\default-pet.png' %}" class="card-img-top" alt="Default Image" style="height: 220px; object-fit: cover;">
+          {% endif %}
       <div class="card border-0 shadow-sm p-4 rounded-4">
         <h5 class="fw-bold text-dark mb-3">
           <i class="fa-solid fa-align-left text-warning me-2"></i>About {{ pet.name }}
@@ -78,9 +82,7 @@
 
           <div class="col-sm-6">
           <strong><i class="fa-solid fa-venus-mars text-muted me-2"></i>Gender:</strong>
-            <span class="text-secondary ms-1">
-            {% if pet.gender %}{{ pet.gender }}{% else %}N/A{% endif %}
-            </span>
+            <span class="text-secondary ms-1">{% if pet.gender %}{{ pet.gender }}{% else %}N/A{% endif %}</span>
           </div>
 
           <div class="col-sm-6">

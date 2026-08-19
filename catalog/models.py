@@ -43,11 +43,8 @@ class Pet(models.Model):
     gender = models.CharField(max_length=1, choices=gender_choise, default="F")
     age_months = models.PositiveIntegerField(default=12)
     story = models.TextField(blank=True, help_text="Rescue story and character description")
-    is_adopted = models.BooleanField(default=False)
-    people = models.ManyToManyField(Person, related_name="pets", blank=True)
+    visitors = models.ManyToManyField(Person, related_name="pets", blank=True)
 
-    class Meta:
-        ordering = ["is_adopted", "name"]
 
     class Status(models.TextChoices):
         under_treatment = "UT", "Under Treatment / In Shelter"

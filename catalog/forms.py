@@ -41,12 +41,6 @@ class BreedActiveUpdateForm(forms.ModelForm):
 
 
 class PetForm(forms.ModelForm):
-    person = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
-
     class Meta:
         model = Pet
         fields = "__all__"
