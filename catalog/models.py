@@ -18,7 +18,6 @@ class Breed(models.Model):
 
 
 class Person(AbstractUser):
-    about_user = models.TextField()
 
     class Meta:
         verbose_name = "person"

@@ -6,6 +6,7 @@ from .views import (
     PetCreateView,
     PetUpdateView,
     PetDeleteView,
+    PersonCreateView,
     PersonListView,
     PersonDetailView,
     PersonDeleteView,
@@ -34,7 +35,7 @@ urlpatterns = [
     path("pets/create/", PetCreateView.as_view(), name="pet-create"),
     path("pets/<int:pk>/update/", PetUpdateView.as_view(), name="pet-update"),
     path("pets/<int:pk>/delete/", PetDeleteView.as_view(), name="pet-delete"),
-
+    path("people/create/", PersonCreateView.as_view(), name="person-create"),
     path("people/", PersonListView.as_view(), name="person-list"),
     path("people/<int:pk>/", PersonDetailView.as_view(), name="person-detail"),
     path("people/<int:pk>/delete/", PersonDeleteView.as_view(), name="person-delete"),

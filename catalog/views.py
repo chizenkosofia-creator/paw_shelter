@@ -6,8 +6,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 from catalog.forms import PetForm, BreedCreationForm, PersonCreationForm
-from catalog.models import Pet, Breed
-from django.urls import reverse_lazy
+from catalog.models import Pet, Breed, Person
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 
@@ -43,7 +43,14 @@ class AdminRequiredMixin(UserPassesTestMixin):
         return self.request.user.is_authenticated and self.request.user.is_staff
 
 
-class PersonListView(LoginRequiredMixin, generic.DeleteView):
+class PersonCreateView(generic.CreateView):
+    model = Person
+    form_class = PersonCreationForm
+    template_name = "catalog/person_form.html"
+    success_url = reverse_lazy("catalog:person-detail")
+
+
+class PersonListView(LoginRequiredMixin, generic.ListView):
     model = User
 
 
@@ -55,17 +62,16 @@ class PersonDetailView(LoginRequiredMixin, generic.DetailView):
 class PersonDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = User
     template_name = "catalog/person_confirm_delete.html"
-    success_url = reverse_lazy("catalog:person-list")
+    success_url = reverse_lazy("catalog:person-detail")
 
 
 class PersonUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = User
     fields = ["first_name", "last_name", "email"]
-    template_name = "catalog:person-list"
+    template_name = "catalog/person_form.html"
 
     def get_success_url(self):
-        return reverse_lazy("catalog:person-detail",
-                            kwargs={"pk": self.object.pk})
+        return reverse("catalog:person-detail", kwargs={"pk": self.object.pk})
 
 
 class PetListView(generic.ListView):
