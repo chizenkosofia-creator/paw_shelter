@@ -21,7 +21,8 @@ class BreedCreationForm(forms.ModelForm):
     active_need = forms.IntegerField(
         validators=[active_need],
     )
-
+    active_need = forms.IntegerField(required=False,)
+    description = forms.CharField(required=False, widget=forms.Textarea)
     class Meta:
         model = Breed
         fields = ("name",
@@ -30,17 +31,7 @@ class BreedCreationForm(forms.ModelForm):
                   "description")
 
 
-class BreedActiveUpdateForm(forms.ModelForm):
-    active_need = forms.IntegerField(
-        validators=[active_need],
-    )
-
-    class Meta:
-        model = get_user_model()
-        fields = ("active_need",)
-
-
 class PetForm(forms.ModelForm):
     class Meta:
         model = Pet
-        fields = "__all__"
+        exclude = ["visitors"]

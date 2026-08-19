@@ -2,38 +2,78 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="fw-bold">Pet List</h1>
+  <div class="container py-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4 gap-3">
 
-    {% if user.is_staff %}
-      <a href="{% url 'catalog:pet-create' %}" class="btn btn-primary">
-        <i class="fa-solid fa-plus me-1"></i> Add New Pet
-      </a>
-    {% endif %}
-  </div>
+      <!-- Title & Action Buttons -->
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <h1 class="fw-bold mb-0 me-2">Pet List</h1>
 
-  <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for pet in pet_list %}
-      <div class="col">
-        <div class="card h-100 shadow-sm border-0">
-          {% if pet.image %}
-            <img src="{{ pet.image.url }}" class="card-img-top" alt="{{ pet.name }}" style="height: 220px; object-fit: cover;">
-          {% else %}
-            <img src="{% static 'images/default-pet.png' %}" class="card-img-top" alt="Default Image" style="height: 220px; object-fit: cover;">
+        {% if user.is_staff %}
+          <a href="{% url 'catalog:breed-list' %}" class="btn btn-warning">
+            <i class="fa-solid fa-layer-group me-1"></i> All Breeds
+          </a>
+          <a href="{% url 'catalog:breed-create' %}" class="btn btn-outline-primary">
+            <i class="fa-solid fa-plus me-1"></i> Add Breed
+          </a>
+          <a href="{% url 'catalog:pet-create' %}" class="btn btn-primary">
+            <i class="fa-solid fa-plus me-1"></i> Add Pet
+          </a>
+        {% endif %}
+      </div>
+
+      <form method="get" class="m-0" style="max-width: 420px; width: 100%;">
+        <div class="input-group">
+          <input
+            type="text"
+            name="name"
+            class="form-control"
+            placeholder="Search pet by name or breed..."
+            value="{{ search_name }}"
+          >
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+          </button>
+          {% if search_name %}
+            <a href="{% url 'catalog:pet-list' %}" class="btn btn-outline-secondary">Reset</a>
           {% endif %}
-          <div class="card-body">
-            <h5 class="card-title fw-bold">{{ pet.name }}</h5>
-            <p class="text-muted">{{ pet.breed.name }}</p>
-            <a href="{% url 'catalog:pet-detail' pk=pet.pk %}" class="btn btn-outline-primary btn-sm">View details</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+      {% for pet in pet_list %}
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="card-title fw-bold mb-2">{{ pet.name }}</h5>
+                {% if pet.breed %}
+                  <a href="{% url 'catalog:breed-detail' pk=pet.breed.pk %}" class="btn btn-sm btn-success mb-3">
+                    {{ pet.breed.name }}
+                  </a>
+                {% else %}
+                  <span class="badge bg-secondary mb-3">Mixed Breed</span>
+                {% endif %}
+              </div>
+
+              <div>
+                <a href="{% url 'catalog:pet-detail' pk=pet.pk %}" class="btn btn-outline-primary btn-sm w-100">
+                  View details
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    {% empty %}
-      <div class="col-12">
-        <p class="text-muted">No pets found.</p>
-      </div>
-    {% endfor %}
+      {% empty %}
+        <div class="col-12">
+          <p class="text-muted">No pets found.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      {% include "includes/pagination.html" %}
+    {% endif %}
   </div>
-</div>
 {% endblock %}

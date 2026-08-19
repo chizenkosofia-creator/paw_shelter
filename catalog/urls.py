@@ -12,6 +12,7 @@ from .views import (
     PersonUpdateView,
     BreedListView,
     BreedCreateView,
+    BreedDetailView,
     BreedUpdateView,
     BreedDeleteView,
     toggle_favorite_pet,
@@ -22,7 +23,7 @@ app_name = "catalog"
 urlpatterns = [
     path("", index, name="index"),
     path("register/", RegisterView.as_view(), name="register"),
-
+    path("breeds/<int:pk>/", BreedDetailView.as_view(), name="breed-detail"),
     path("breeds/", BreedListView.as_view(), name="breed-list"),
     path("breeds/create/", BreedCreateView.as_view(), name="breed-create"),
     path("breeds/<int:pk>/update/", BreedUpdateView.as_view(), name="breed-update"),

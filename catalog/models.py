@@ -7,7 +7,7 @@ class Breed(models.Model):
     name = models.CharField(max_length=255, unique=True)
     type = models.CharField(max_length=255)
     active_need = models.IntegerField(
-        help_text="Activity level from 1 to 10")
+        help_text="Activity level from 1 to 10", blank=True, null=True,)
     description = models.TextField()
 
     class Meta:
@@ -39,7 +39,6 @@ class Pet(models.Model):
     ]
     name = models.CharField(max_length=255)
     breed = models.ForeignKey(Breed, on_delete=models.CASCADE, related_name="pets")
-    image = models.ImageField(upload_to="pets/", blank=True, null=True)
     gender = models.CharField(max_length=1, choices=gender_choise, default="F")
     age_months = models.PositiveIntegerField(default=12)
     story = models.TextField(blank=True, help_text="Rescue story and character description")

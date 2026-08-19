@@ -1,51 +1,81 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Breeds List
-    <a href="{% url 'catalog:breed-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
-  </h1>
+  <div class="container py-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4 gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <h1 class="fw-bold mb-0">Breeds List</h1>
 
-  {% if breed_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Active need</th>
-        <th>Description</th>
-      </tr>
+        {% if user.is_staff %}
+          <a href="{% url 'catalog:breed-create' %}" class="btn btn-primary text-nowrap">
+            <i class="fa-solid fa-plus me-1"></i> Add New Breed
+          </a>
+        {% endif %}
+      </div>
 
-      {% for breed in breed_list %}
-        <tr>
-          <td>
-              {{ breed.id }}
-          </td>
-          <td>
-              {{ breed.name }}
-          </td>
-          <td>
-              {{ breed.type }}
-          </td>
-          <td>
-              <a href="{% url 'catalog:breed-update' pk=breed.id %}">
-                Update
-              </a>
-            </td>
-            <td>
-              <a style="color: red"
-                href="{% url 'catalog:breed-delete' pk=breed.id %}">
-                Delete
-              </a>
-            </td>
-        </tr>
-      {% endfor %}
-    </table>
+      <form method="get" class="m-0" style="max-width: 420px; width: 100%;">
+        <div class="input-group">
+          <input
+            type="text"
+            name="name"
+            class="form-control"
+            placeholder="Search breed by name or type..."
+            value="{{ search_name }}"
+          >
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+          </button>
+          {% if search_name %}
+            <a href="{% url 'catalog:breed-list' %}" class="btn btn-outline-secondary">Reset</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+    {% if breed_list %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Active Need</th>
+              <th>Description</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for breed in breed_list %}
+              <tr>
+                <td>{{ breed.id }}</td>
+                <td class="fw-bold">
+                  <a href="{% url 'catalog:breed-detail' pk=breed.id %}" class="text-decoration-none">
+                    {{ breed.name }}
+                  </a>
+                </td>
+                <td>{{ breed.type }}</td>
+                <td>{{ breed.active_need|default:"—" }}</td>
+                <td>{{ breed.description|default:"—"|truncatewords:10 }}</td>
+                <td class="text-end">
+                  <a href="{% url 'catalog:breed-update' pk=breed.id %}" class="btn btn-sm btn-outline-secondary me-1">
+                    Update
+                  </a>
+                  <a href="{% url 'catalog:breed-delete' pk=breed.id %}" class="btn btn-sm btn-outline-danger">
+                    Delete
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-  {% else %}
-      <p>There are no breeds in the service.</p>
-  {% endif %}
+      {% if is_paginated %}
+        {% include "includes/pagination.html" %}
+      {% endif %}
+
+    {% else %}
+      <p class="text-muted">There are no breeds in the service.</p>
+    {% endif %}
+  </div>
 {% endblock %}
-/

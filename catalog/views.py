@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
-from catalog.forms import PetForm, BreedCreationForm, BreedActiveUpdateForm, PersonCreationForm
-from catalog.models import Pet, Breed, Person
-from django.contrib.auth.forms import UserCreationForm
+from catalog.forms import PetForm, BreedCreationForm, PersonCreationForm
+from catalog.models import Pet, Breed
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -15,9 +15,9 @@ User = get_user_model()
 
 
 def index(request):
-    num_pets = Pet.objects.filter(is_adopted=False).count()
-    num_adopted = Pet.objects.filter(is_adopted=True).count()
-    featured_pets = Pet.objects.filter(is_adopted=False)[:3]
+    num_pets = Pet.objects.count()
+    num_adopted = Pet.objects.filter(status=Pet.Status.adoption).count()
+    featured_pets = Pet.objects.filter(status=Pet.Status.under_treatment)[:3]
     total_pets = Pet.objects.count()
     pets_ready_for_adoption = Pet.objects.filter(status=Pet.Status.ready_for_adoption).count()
 
@@ -75,10 +75,21 @@ class PetListView(generic.ListView):
 
     def get_queryset(self):
         queryset = Pet.objects.select_related("breed")
+        name = self.request.GET.get("name")
+        if name:
+            queryset = queryset.filter(
+                Q(name__icontains=name) | Q(breed__name__icontains=name)
+            )
         species = self.request.GET.get("type")
         if species:
             queryset = queryset.filter(breed__type__iexact=species)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_name"] = self.request.GET.get("name", "")
+        context["search_type"] = self.request.GET.get("type", "")
+        return context
 
 
 class PetDetailView(generic.DetailView):
@@ -107,16 +118,37 @@ class PetDeleteView(AdminRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_favorite_pet(request, pk):
     pet = get_object_or_404(Pet, id=pk)
-    if request.user in pet.people.all():
-        pet.people.remove(request.user)
+    if request.user in pet.visitors.all():
+        pet.visitors.remove(request.user)
     else:
-        pet.people.add(request.user)
+        pet.visitors.add(request.user)
     return HttpResponseRedirect(reverse_lazy(
         "catalog:pet-detail", args=[pk]))
 
-class BreedListView(LoginRequiredMixin, generic.ListView):
+
+class BreedListView(generic.ListView):
     model = Breed
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.GET.get("name")
+        if name:
+            queryset = queryset.filter(
+                Q(name__icontains=name) | Q(type__icontains=name)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_name"] = self.request.GET.get("name", "")
+        return context
+
+
+class BreedDetailView(generic.DetailView):
+    model = Breed
+    template_name = "catalog/breed_detail.html"
+    context_object_name = "breed"
 
 
 class BreedCreateView(AdminRequiredMixin, generic.CreateView):
