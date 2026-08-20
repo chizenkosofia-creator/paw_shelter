@@ -1,36 +1,30 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
 from catalog.forms import PetForm, BreedCreationForm, PersonCreationForm
 from catalog.models import Pet, Breed, Person
 from django.urls import reverse_lazy, reverse
-from django.views import generic
-
+from django.views import generic, View
 
 User = get_user_model()
 
 
-def index(request):
-    num_pets = Pet.objects.count()
-    num_adopted = Pet.objects.filter(status=Pet.Status.adoption).count()
-    featured_pets = Pet.objects.filter(status=Pet.Status.under_treatment)[:3]
-    total_pets = Pet.objects.count()
-    pets_ready_for_adoption = Pet.objects.filter(status=Pet.Status.ready_for_adoption).count()
+class IndexView(generic.TemplateView):
+    template_name = "catalog/index.html"
 
-    context = {
-        "num_pets": num_pets,
-        "num_adopted": num_adopted,
-        "featured_pets": featured_pets,
-        "total_pets": total_pets,
-        "pets_ready_for_adoption": pets_ready_for_adoption,
-    }
-
-    return render(request, "catalog/index.html", context=context)
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["num_pets"] = Pet.objects.count()
+        context["num_adopted"] = Pet.objects.filter(status=Pet.Status.adoption).count()
+        context["featured_pets"] = Pet.objects.filter(status=Pet.Status.under_treatment)[:3]
+        context["total_pets"] = Pet.objects.count()
+        context["pets_ready_for_adoption"] = Pet.objects.filter(
+            status=Pet.Status.ready_for_adoption
+        ).count()
+        return context
 
 class RegisterView(generic.CreateView):
     form_class = PersonCreationForm
@@ -121,16 +115,14 @@ class PetDeleteView(AdminRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("catalog:pet-list")
 
 
-@login_required
-def toggle_favorite_pet(request, pk):
-    pet = get_object_or_404(Pet, id=pk)
-    if request.user in pet.visitors.all():
-        pet.visitors.remove(request.user)
-    else:
-        pet.visitors.add(request.user)
-    return HttpResponseRedirect(reverse_lazy(
-        "catalog:pet-detail", args=[pk]))
-
+class ToggleFavoritePetView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        pet = get_object_or_404(Pet, id=pk)
+        if request.user in pet.visitors.all():
+            pet.visitors.remove(request.user)
+        else:
+            pet.visitors.add(request.user)
+        return HttpResponseRedirect(reverse("catalog:pet-detail", args=[pk]))
 
 class BreedListView(generic.ListView):
     model = Breed

@@ -1,6 +1,8 @@
 from django.urls import path
+from django.views import View
+
 from .views import (
-    index,
+    IndexView,
     PetListView,
     PetDetailView,
     PetCreateView,
@@ -16,13 +18,13 @@ from .views import (
     BreedDetailView,
     BreedUpdateView,
     BreedDeleteView,
-    toggle_favorite_pet,
+    ToggleFavoritePetView,
     RegisterView,
     HowToHelpView,
 )
 app_name = "catalog"
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("register/", RegisterView.as_view(), name="register"),
     path("breeds/<int:pk>/", BreedDetailView.as_view(), name="breed-detail"),
     path("breeds/", BreedListView.as_view(), name="breed-list"),
@@ -40,7 +42,7 @@ urlpatterns = [
     path("people/<int:pk>/", PersonDetailView.as_view(), name="person-detail"),
     path("people/<int:pk>/delete/", PersonDeleteView.as_view(), name="person-delete"),
     path("people/<int:pk>/update/", PersonUpdateView.as_view(), name="person-update"),
-    path("people/<int:pk>/toggle-assign/", toggle_favorite_pet, name="assign_to_pet"),
+    path("people/<int:pk>/toggle-assign/", ToggleFavoritePetView.as_view(), name="assign_to_pet"),
 
     path("how-to-help/", HowToHelpView.as_view(), name="how-to-help"),
 ]
