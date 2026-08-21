@@ -39,7 +39,7 @@ class ViewsTests(TestCase):
     def test_pet_list_view_search_filter(self) -> None:
         Pet.objects.create(
             name="Whiskers",
-            age=2,
+            age_months=2,
             breed=Breed.objects.create(name="Persian", type="Cat")
         )
         response = self.client.get(reverse("catalog:pet-list"), {"name": "Buddy"})
