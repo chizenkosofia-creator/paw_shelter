@@ -17,7 +17,7 @@ class ViewsTests(TestCase):
             password="Password123!"
         )
         self.breed = Breed.objects.create(name="Golden Retriever", type="Dog")
-        self.pet = Pet.objects.create(name="Buddy", age=3, breed=self.breed)
+        self.pet = Pet.objects.create(name="Buddy", age_months=3, breed=self.breed)
 
     def test_index_view_context(self) -> None:
         response = self.client.get(reverse("catalog:index"))
@@ -50,7 +50,7 @@ class ViewsTests(TestCase):
     def test_pet_create_view_forbidden_for_regular_user(self) -> None:
         self.client.force_login(self.user)
         response = self.client.get(reverse("catalog:pet-create"))
-        self.assertEqual(response.status_code, 430)
+        self.assertEqual(response.status_code, 403)
 
     def test_pet_create_view_allowed_for_admin(self) -> None:
         self.client.force_login(self.admin_user)
@@ -59,7 +59,7 @@ class ViewsTests(TestCase):
 
     def test_toggle_favorite_pet_view(self) -> None:
         self.client.force_login(self.user)
-        url = reverse("catalog:toggle-favorite-pet", kwargs={"pk": self.pet.pk})
+        url = reverse("catalog:assign_to_pet", kwargs={"pk": self.pet.pk})
         response = self.client.get(url)
         self.assertRedirects(response, reverse("catalog:pet-detail", args=[self.pet.pk]))
         self.assertTrue(self.pet.visitors.filter(id=self.user.id).exists())

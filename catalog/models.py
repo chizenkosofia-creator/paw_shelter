@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 
@@ -7,7 +8,11 @@ class Breed(models.Model):
     name = models.CharField(max_length=255, unique=True)
     type = models.CharField(max_length=255)
     active_need = models.IntegerField(
-        help_text="Activity level from 1 to 10", blank=True, null=True,)
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        help_text="Activity level from 1 to 10",
+        blank=True,
+        null=True,
+    )
     description = models.TextField()
 
     class Meta:

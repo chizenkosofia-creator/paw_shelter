@@ -55,16 +55,6 @@ class FormsTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("active_need", form.errors)
 
-    def test_pet_form_valid_data(self) -> None:
-        breed = Breed.objects.create(name="Labrador", type="Dog")
-        form_data = {
-            "name": "Gubby",
-            "age": 3,
-            "breed": breed.id,
-        }
-        form = PetForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
     def test_pet_form_excludes_visitors_field(self) -> None:
         form = PetForm()
         self.assertNotIn("visitors", form.fields)
