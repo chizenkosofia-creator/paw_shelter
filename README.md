@@ -1,19 +1,19 @@
 # Paw Shelter 🐾
 
-**Paw Shelter** — це веб-додаток для притулку тварин, який допомагає організувати облік улюбленців, що шукають дім, а також надає користувачам можливість зручно шукати тварин та додавати їх до списку обраних.
+**Paw Shelter** is a web application for an animal shelter that helps manage pets looking for a home, while also enabling users to conveniently search for pets and save them to a list of favorites.
 
 ---
 
-## Функціональність
+## Features
 
-* **Керування профілями:** Реєстрація, аутентифікація, створення та оновлення профілю користувача.
-* **Каталог тварин:** Перегляд списку тварин із детальною інформацією про кожну (порода, тип, особливості).
-* **Список обраних тварин:** Збереження улюблених тварин у своєму профілі для швидкого доступу.
-* **Адмін-панель:** Зручне управління базою даних тварин, порід та користувачів.
+* **Profile Management:** User registration, authentication, profile creation, and updates.
+* **Pet Catalog:** Browse the list of animals with detailed information for each (breed, type, traits/features).
+* **Favorites List:** Save favorite pets to user profiles for quick access.
+* **Admin Panel:** Convenient management of the database containing animals, breeds, and users.
 
 ---
 
-## Технології
+## Tech Stack
 
 * **Backend:** Python 3, Django
 * **Frontend:** HTML5, CSS3, Bootstrap 5, FontAwesome
@@ -21,11 +21,13 @@
 
 ---
 
-## Як запустити проект локально
+## Installation
 
-1. **Клонуйте репозиторій:**
-   ```bash
-   git clone <URL_ВАШОГО_РЕПОЗИТОРІЮ>
-   cd paw_shelter
-
----
+```shell
+git clone https://github.com/chizenkosofia-creator/paw_shelter.git
+cd paw_shelter
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py runserver
+```
