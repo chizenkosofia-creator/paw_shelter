@@ -3,7 +3,13 @@
 **Paw Shelter** is a web application for an animal shelter that helps manage pets looking for a home, while also enabling users to conveniently search for pets and save them to a list of favorites.
 
 ---
+## User for test
 
+* **login:** admin
+* **password:** 123456
+https://paw-shelter.onrender.com
+
+---
 ## Features
 
 * **Profile Management:** User registration, authentication, profile creation, and updates.
