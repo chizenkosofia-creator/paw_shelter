@@ -4,6 +4,13 @@
 
 ---
 
+## User for test
+
+* **login:** admin
+* **password:** 123456
+
+---
+
 ## Features
 
 * **Profile Management:** User registration, authentication, profile creation, and updates.
@@ -31,3 +38,5 @@ source venv/bin/activate
 pip install -r requirements.txt
 python manage.py runserver
 ```
+
+
