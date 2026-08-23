@@ -1,0 +1,60 @@
+[
+{
+    "model": "catalog.breed",
+    "pk": 1,
+    "fields": {
+        "name": "Mixed Breed / Mongrel",
+        "type": "Dog/Cat",
+        "active_need": 5,
+        "description": "Unique genetic blend; healthy and adaptable."
+    }
+},
+{
+    "model": "catalog.breed",
+    "pk": 2,
+    "fields": {
+        "name": "Domestic Short Hair (Moggie)",
+        "type": "Cat",
+        "active_need": 5,
+        "description": "Classic mixed domestic cat."
+    }
+},
+{
+    "model": "catalog.breed",
+    "pk": 3,
+    "fields": {
+        "name": "Street Rescue (Unknown)",
+        "type": "Dog/Cat",
+        "active_need": null,
+        "description": "Rescued community dog needing a loving home."
+    }
+},
+{
+    "model": "catalog.breed",
+    "pk": 4,
+    "fields": {
+        "name": "Domestic Long Hair",
+        "type": "Cat",
+        "active_need": 4,
+        "description": "Fluffy mixed-breed cat."
+    }
+},
+{
+    "model": "catalog.person",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1200000$CgeHeORhBI30OZWBPXrz8r$cajOO62xMJ7HOii81F78iyMzmWWXbpx5oQcTxQi4ORY=",
+        "last_login": "2026-08-23T10:28:36.372Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-08-23T10:19:21.351Z",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]
