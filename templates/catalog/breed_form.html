@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h1>{{ object|yesno:"Update,Create" }} breed</h1> {# Додав H1 для назви #}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Save</button> {# Додав button тег #}
+  </form>
+  <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
+      Back
+  </button>
+{% endblock %}
